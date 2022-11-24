@@ -17,7 +17,7 @@ def get_target_cpu(d):
     for arg in (d.getVar('TUNE_FEATURES') or '').split():
         if arg == "cortexa7":
             return 'arm'
-        if arg == "armv8a":
+        if arg == "armv8a | armv8-2a":
             return 'arm64'
     return 'arm64'
 
@@ -27,7 +27,7 @@ def get_arm_arch(d):
             return 'armv7ve'
         if arg == "armv8a":
             return 'armv8-a'
-    return 'armv8-a'
+    return 'armv8-2a'
 
 def get_arm_cpu(d):
     for arg in (d.getVar('TUNE_FEATURES') or '').split():
@@ -35,7 +35,7 @@ def get_arm_cpu(d):
             return 'cortex-a7'
         if arg == "armv8a":
             return 'cortex-a53'
-    return 'cortex-a53'
+    return 'cortex-a55'
 
 TARGET_CPU = "${@get_target_cpu(d)}"
 TARGET_ARM_ARCH = "${@get_arm_arch(d)}"
