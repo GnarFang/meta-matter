@@ -7,14 +7,14 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7ca
 SRCBRANCH = "v1.2-branch-nxp_imx_2023_q4"
 IMX_MATTER_SRC ?= "gitsm://github.com/NXP/matter.git;protocol=https"
 SRC_URI = "${IMX_MATTER_SRC};branch=${SRCBRANCH}"
-MATTER_PY_PATH ?= "${TOPDIR}/matter_venv/bin/python"
+MATTER_PY_PATH ?= "${STAGING_BINDIR_NATIVE}/python3-native/python3.11"
 
 PATCHTOOL = "git"
 
 SRCREV = "${AUTOREV}"
 
 TARGET_CC_ARCH += "${LDFLAGS}"
-DEPENDS += " gn-native ninja-native avahi dbus-glib-native pkgconfig-native zap-native boost "
+DEPENDS += " gn-native ninja-native avahi dbus-glib-native pkgconfig-native zap-native boost python3-pip-native"
 RDEPENDS_${PN} += " libavahi-client "
 FILES:${PN} += "usr/share"
 
@@ -85,6 +85,9 @@ trusty_configure() {
 }
 
 do_configure() {
+    # install requirements
+    ${MATTER_PY_PATH} -m pip install -r ${B}/scripts/setup/requirements.build.txt
+
     cd ${S}/
     if ${DEPLOY_TRUSTY}; then
         git submodule update --init
